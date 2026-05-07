@@ -3,13 +3,24 @@ const path = require('path');
 const publicUsers = express.Router();
 const {requireAuth} = require('../middleware/authMiddleware.js');
 const {login_post} = require('../controllers/authController.js');
+const rateLimit = require('express-rate-limit');
+
+
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // Limit each IP to 5 login requests per window
+    message: { error: 'Too many login attempts from this IP, please try again after 15 minutes' },
+    standardHeaders: true, 
+    legacyHeaders: false, 
+});
+
 
 // === PUBLIC ROUTES (No Cookie Required) ===
 publicUsers.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../../public', 'index.html'));
 });
 
-publicUsers.post('/', login_post);
+publicUsers.post('/',loginLimiter ,login_post);
 
 publicUsers.get('/logout',(req,res)=>{
     res.clearCookie('jwt'); // We changed from sessions to JWTs, so clear the cookie!
