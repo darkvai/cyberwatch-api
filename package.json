@@ -1,0 +1,40 @@
+{
+  "name": "cyberwatch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darkvai/CyberWatch.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/darkvai/CyberWatch/issues"
+  },
+  "homepage": "https://github.com/darkvai/CyberWatch#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "body-parser": "^2.2.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "ejs": "^3.1.10",
+    "express": "^5.2.1",
+    "express-session": "^1.18.2",
+    "jquery": "^3.7.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.4.1",
+    "sequelize": "^3.30.0",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3",
+    "socketio": "^1.0.0",
+    "sqlite3": "^6.0.1"
+  }
+}

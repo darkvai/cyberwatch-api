@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberWatch // Profile</title>
+    <link rel="stylesheet" href="styles.css"> 
+    <style>
+        .profile-wrapper {
+            background-color: #1f1f1f;
+            border: 1px solid #333;
+            height: 100%; 
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            margin-top: 20px; 
+        }
+
+        
+        .profile-sidebar {
+            width: 300px;
+            background-color: #303030;
+            border-right: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .avatar-frame {
+            width: 140px;
+            height: 140px;
+            border: 2px solid #333;
+            border-radius: 50%;
+            padding: 8px;
+            margin-bottom: 20px;
+            background: #000000;
+        }
+
+        .avatar-frame img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            display: block;
+        }
+
+        .user-identity h2 {
+            color: #fff;
+            font-size: 22px;
+            margin: 0 0 8px 0;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .user-identity p {
+            color: #6819cf;
+            font-size: 14px;
+            text-align: center;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        
+        .profile-details {
+            flex: 1;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 40px;
+        }
+
+        .field-group label {
+            display: block;
+            color: #666;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .field-group .mail ,.username ,.value {
+            color: #eee;
+            font-size: 16px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+            font-family: monospace; 
+        }
+
+        .fingerprint-box {
+            margin-top: auto;
+            border-top: 1px solid #222;
+            padding-top: 20px;
+        }
+
+        .fingerprint-code {
+            font-family: monospace;
+            color: #555;
+            font-size: 12px;
+            word-spacing: -1px;
+        }
+
+        .action-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .logout-btn {
+            border: 1px solid #442222;
+            color: #ff4444;
+            background: transparent;
+            padding: 10px 30px;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .Email{
+            color: #eee;
+        }
+
+        .logout-btn:hover {
+            background: #ff4444;
+            color: #000;
+            border-color: #ff4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <header>
+            <div class="brand">
+                <div class="logo-box"></div>
+                <div class="brand-text">
+                    <h1>CyberWatch</h1>
+                    <span>Monitoring System</span>
+                </div>
+            </div>
+            <div class="user-profile">
+                <span><a href="/profile">Analyst_01</a></span>
+                <div class="profile-circle"></div>
+            </div>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="/dashboard" >Dashboard 📊 </a></li>
+                <li><a href="#" id="Create-tick">Create ticket 🎟️ </a></li>
+                <li><a href="/logs">Track Logs 📜 </a></li>
+            </ul>
+        </nav>
+
+        <div class="profile-wrapper">
+            
+            <div class="profile-sidebar">
+                <div class="avatar-frame">
+                    <img src="https://api.dicebear.com/9.x/identicon/svg?seed=Robert" alt="Avatar">
+                </div>
+                <div class="user-identity">
+                    <h2></h2>
+                    <p>Level 3 Administrator</p>
+                </div>
+            </div>
+
+            <div class="profile-details">
+                <div class="details-grid">
+                    <div class="field-group">
+                        <label>Full Name</label>
+                        <div class="username"></div>
+                    </div>
+
+                    <div class="field-group">
+                        <label>Email Address</label>
+                        <div class="mail"></div>
+                    </div>
+
+                    <div class="field-group">
+                        <label>Department</label>
+                        <div class="value">Security Operations Center (SOC)</div>
+                    </div>
+
+                </div>
+
+                <div class="fingerprint-box">
+                    <div class="action-bar">
+                        <a href="/logout" class="logout-btn">Log Out</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
