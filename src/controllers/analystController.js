@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
-const Analyst = require('../models/analyst'); 
+
+
+const {getAllAnalysts, addAnalyst} = require('../services/analystService.js')
 
 
 
@@ -13,11 +15,7 @@ exports.createAnalyst = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newAnalyst = await Analyst.create({
-            username,
-            password: hashedPassword
-        });
-
+        const newAnalyst = await addAnalyst(username,hashedPassword)
         res.status(201).json({ 
             message: "Analyst provisioned successfully", 
             analyst: { id: newAnalyst._id, username: newAnalyst.username } 
@@ -35,7 +33,7 @@ console.error("System error creating analyst:", error);
 
 exports.getAllAnalyst = async (req,res) =>{
     try{
-        const analysts= await Analyst.find();
+        const analysts= await getAllAnalysts();
         res.status(200).json(analysts);
     }
     catch(error){

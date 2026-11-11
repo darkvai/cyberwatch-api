@@ -1,14 +1,13 @@
-const Incident = require('../models/incident'); // <-- Notice the two dots
+
+
+const {allIncidents, addInicident , updateIncidentStatus , getIncidentById,deleteIncident, escalateIncident} = require('../services/logsIngestionService.js')
+
 // @desc    Get all incidents for the SOC Dashboard
 // @route   GET /api/incidents
 exports.getAllIncidents = async (req, res) => {
     try {
         // Fetch incidents and JOIN the related data
-        const incidents = await Incident.find()
-            .populate('asset_id', 'hostname ip_address criticality') // Only fetch specific fields
-            .populate('log_id', 'event_type message severity createdAt')
-            .populate('analyst_id', 'name role')
-            .sort({ createdAt: -1 }); // Sort by newest first
+        const incidents = await allIncidents();// Sort by newest first
 
         res.status(200).json(incidents);
     } catch (error) {
@@ -21,18 +20,8 @@ exports.getAllIncidents = async (req, res) => {
 
 exports.insertIncident = async (req, res) => {
     try {
-        const ticketData = {
-            ...req.body,
-            analyst_id: req.analyst.id 
-        };
-
-        let newIncident = new Incident(ticketData);
-        
-        // 1. Save the document to the database first
-        await newIncident.save(); 
-
-        // 2. Hydrate the document with the Asset data
-        await newIncident.populate('asset_id', 'hostname ip_address criticality');
+     
+        let newIncident = addIncident(req);
 
         res.status(201).json({ 
             message: 'Ticket added successfully', 
@@ -58,11 +47,7 @@ exports.updateIncidentStatus = async (req, res) => {
             return res.status(400).json({ error: 'Invalid status provided.' });
         }
 
-        const incident = await Incident.findByIdAndUpdate(
-            id,
-            { status: status },
-            { new: true, runValidators: true } // Return updated doc & run schema validation
-        );
+        const incident = await updateIncidentStatus(id,status);
 
 
         if (!incident) {
@@ -80,7 +65,7 @@ exports.updateIncidentStatus = async (req, res) => {
 exports.deleteIncident = async (req,res) => {
     try{
         let {id} = req.params;
-        const deletedIncident = await Incident.findByIdAndDelete(id);
+        const deletedIncident = await deleteIncident(id);
         if(!deletedIncident){
             return res.status(404).json({error : 'Inicident not found'});
         };
@@ -102,10 +87,7 @@ exports.getIncidentById = async (req, res) => {
         const { id } = req.params;
 
         // Fetch the incident and hydrate the relationships
-        const incident = await Incident.findById(id)
-            .populate('asset_id', 'hostname ip_address criticality')
-            .populate('log_id', 'event_type message severity createdAt')
-            .populate('analyst_id', 'name role');
+        const incident = await getIncidentById(id);
 
         // If no incident matches the ID, return a 404 Not Found
         if (!incident) {
@@ -142,16 +124,7 @@ exports.escalateIncident = async (req, res) => {
         }
 
         // 2. Find and update the ticket simultaneously
-        const escalatedIncident = await Incident.findByIdAndUpdate(
-            id,
-            { 
-                status: 'Escalated',
-                escalation_reason: escalation_reason 
-            },
-            { new: true, runValidators: true } 
-        ).populate('asset_id', 'hostname ip_address')
-         .populate('analyst_id', 'name role');
-
+        const escalatedIncident = await escalateIncident(id);
         // 3. Handle 404 if the ID doesn't exist
         if (!escalatedIncident) {
             return res.status(404).json({ error: 'Incident not found.' });

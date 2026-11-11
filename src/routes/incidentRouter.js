@@ -20,7 +20,7 @@ incidentRouter.get('/',getAllIncidents);
 
 incidentRouter.post('/',insertIncident);
 
-incidentRouter.put('/:id',requireRole('L2','L3'),updateIncidentStatus);
+incidentRouter.patch('/:id',requireRole('L2','L3'),updateIncidentStatus);
 
 incidentRouter.put('/:id/escalate', requireRole('L2','L3'),escalateIncident)
 

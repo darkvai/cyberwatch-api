@@ -1,4 +1,4 @@
-
+const LogEvent = require('../models/logEvent');
 
 
 
@@ -58,5 +58,25 @@ exports.mapSeverity = (extSeverity) => {
 };
 
 
+exports.saveLog = async (asset, event_type,message,severity)=>{
+    const newLog = new LogEvent({
+                asset_id: asset._id, 
+                event_type: event_type,
+                message: message,
+                severity: severity
+            });
+    
+            return await newLog.save();
 
+}
+
+exports.searchLog = async ()=>{
+        const logs = await LogEvent.find()
+            .populate('asset_id', 'hostname ip_address')
+            .sort({ createdAt: -1 })
+            .limit(100); 
+
+        return logs;
+
+}
 
