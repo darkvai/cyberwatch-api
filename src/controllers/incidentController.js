@@ -53,7 +53,7 @@ exports.updateIncidentStatus = async (req, res) => {
         const { status } = req.body;
 
         // Validate the status input
-        const validStatuses = ['Open',  'Resolved'];
+        const validStatuses = ['Open','Resolved','In Progress','Flagged'];
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ error: 'Invalid status provided.' });
         }
@@ -63,6 +63,7 @@ exports.updateIncidentStatus = async (req, res) => {
             { status: status },
             { new: true, runValidators: true } // Return updated doc & run schema validation
         );
+
 
         if (!incident) {
             return res.status(404).json({ error: 'Incident not found.' });
@@ -123,5 +124,52 @@ exports.getIncidentById = async (req, res) => {
         }
 
         res.status(500).json({ message: "Server error retrieving the incident." });
+    }
+};
+
+// @desc    Escalate an incident to the next tier
+// @route   PUT /api/incidents/:id/escalate
+exports.escalateIncident = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { escalation_reason } = req.body;
+
+        // 1. Enforce the required reason
+        if (!escalation_reason || escalation_reason.trim() === '') {
+            return res.status(400).json({ 
+                error: 'Validation failed: An escalation reason is strictly required.' 
+            });
+        }
+
+        // 2. Find and update the ticket simultaneously
+        const escalatedIncident = await Incident.findByIdAndUpdate(
+            id,
+            { 
+                status: 'Escalated',
+                escalation_reason: escalation_reason 
+            },
+            { new: true, runValidators: true } 
+        ).populate('asset_id', 'hostname ip_address')
+         .populate('analyst_id', 'name role');
+
+        // 3. Handle 404 if the ID doesn't exist
+        if (!escalatedIncident) {
+            return res.status(404).json({ error: 'Incident not found.' });
+        }
+
+        // 4. Return success
+        res.status(200).json({
+            message: 'Incident successfully escalated.',
+            incident: escalatedIncident
+        });
+
+    } catch (error) {
+        console.error("Error escalating incident:", error);
+        
+        if (error.name === 'CastError') {
+            return res.status(400).json({ error: 'Invalid Incident ID format.' });
+        }
+        
+        res.status(500).json({ error: 'Server error during escalation process.' });
     }
 };

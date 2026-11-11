@@ -18,7 +18,8 @@ const analystSchema = new Schema({
     },
     role: {
         type: String,
-        default:'L1 Analyst'
+        enum: ['L1','L2','L3'],
+        default:'L1'
     }
 }, {
     timestamps: true

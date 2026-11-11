@@ -1,5 +1,5 @@
 const express = require("express");
-const db = require('../config/db_connection.js')
+const db = require('../config/NoSQLconnection.js')
 const logsRouter = express.Router();
 const {requireAuth} = require('../middleware/authMiddleware.js');
 const {receiveLog,

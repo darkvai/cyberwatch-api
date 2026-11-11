@@ -3,8 +3,7 @@ const Analyst = require('../models/analyst');
 
 
 
-const bcrypt = require('bcrypt');
-const Analyst = require('../models/analyst'); 
+
 
 
 exports.createAnalyst = async (req, res) => {

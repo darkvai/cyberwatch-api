@@ -18,17 +18,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-    origin: 'http://localhost:5500', // WARNING: Change this to match your frontend's actual URL!
+    origin: process.env.ORIGIN, // WARNING: Change this to match your frontend's actual URL!
     credentials: true                // THIS is the magic key that allows cookies to pass
 }));
 app.use(parser());
 
 
 
-app.use('/api/assets', require('./src/routes/assetRouter'));
-app.use("/api",logsRouter);
-app.use("/incidents",incidentRouter);
-app.use("/",UsersRouter);
+app.use('/v1/cyberwatch/assets', require('./src/routes/assetRouter'));
+app.use("/v1/cyberwatch",logsRouter);
+app.use("/v1/cyberwatch/incidents",incidentRouter);
+app.use("/v1/cyberwatch",UsersRouter);
 app.listen(PORT, () => {
     console.log(`[CyberWatch] Server Online at http://localhost:${PORT}`);
 });

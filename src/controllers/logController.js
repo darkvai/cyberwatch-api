@@ -2,12 +2,17 @@ const LogEvent = require('../models/logEvent');
 const Asset = require('../models/asset'); // Make sure your Asset model is created!
 const Incident = require('../models/incident');
 
+const {normalizePayload , mapSeverity} = require('../services/logsIngestionService.js');
+
+
+
+
 // @desc    Receive logs from the Python Agent
 // @route   POST /api/logs
 exports.receiveLog = async (req, res) => {
     try {
         // 1. Unpack the incoming JSON payload (The DTO extraction)
-        const { hostname, ip_address, event_type, message, severity } = req.body;
+        const { hostname, ip_address, event_type, message, severity } = normalizePayload(req);
 
         // 2. ASSET DISCOVERY (Check if the machine already exists)
         let asset = await Asset.findOne({ hostname: hostname });
@@ -39,18 +44,7 @@ exports.receiveLog = async (req, res) => {
 
         // 4. SOC AUTOMATION (The "War Room" Logic)
         // Automatically open a ticket if the agent sends a dangerous log
-        if (severity === 'High' || severity === 'Critical') {
-            const newIncident = new Incident({
-                title: `Automated Alert: ${event_type}`,
-                description: `System detected a ${severity} severity event on ${hostname}: ${message}`,
-                severity: severity,
-                status: 'Open',
-                asset_id: asset._id,
-                log_id: savedLog._id // Link the exact log that triggered this!
-            });
-            await newIncident.save();
-            console.log(`🚨 AUTOMATED RESPONSE: Incident ticket created for ${hostname}!`);
-        }
+
 
         // 5. Acknowledge Receipt back to the Python Agent
         res.status(201).json({ 
