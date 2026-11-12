@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: cyberwatch-db
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - soc-network
+
+  backend:
+    build: .
+    container_name: cyberwatch-api
+    restart: always
+    ports:
+      - "5000:5000"
+    env:
+      -.env
+    depends_on:
+      - mongodb
+    networks:
+      - soc-network
+
+volumes:
+  mongo_data:
+
+networks:
+  soc-network:
+    driver: bridge
