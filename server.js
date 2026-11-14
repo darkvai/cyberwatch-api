@@ -10,6 +10,7 @@ const PORT = 5500;
 const incidentRouter = require("./src/routes/incidentRouter.js");
 const UsersRouter = require("./src/routes/publicUsers.js");
 const logsRouter = require("./src/routes/logsRouter.js");
+const adminRouter = require("./src/routes/admin.js");
 
 const {requireAuth} = require('./src/middleware/authMiddleware.js');
 
@@ -29,6 +30,7 @@ app.use('/v1/cyberwatch/assets', require('./src/routes/assetRouter'));
 app.use("/v1/cyberwatch",logsRouter);
 app.use("/v1/cyberwatch/incidents",incidentRouter);
 app.use("/v1/cyberwatch",UsersRouter);
+app.use("v1/cyberwatch/admin",adminRouter);
 app.listen(PORT, () => {
     console.log(`[CyberWatch] Server Online at http://localhost:${PORT}`);
 });
