@@ -10,15 +10,15 @@ const {discoverAndRegisterAsset} = require('../services/assetService.js')
 // @route   POST /api/logs
 exports.receiveLog = async (req, res) => {
     try {
-        // 1. Unpack the incoming JSON payload (The DTO extraction)
-        const { hostname, ip_address, event_type, message, severity } = normalizePayload(req);
+        // 1. Unpack the clean validated log from req
+        const Log = req.cleanLog;
 
         // 2. ASSET DISCOVERY (Check if the machine already exists)
-        const asset = discoverAndRegisterAsset(hostname,ip_address);
+        const asset = discoverAndRegisterAsset(Log.hostname,Log.ip_address);
 
         // 3. LOG STORAGE (Save the actual event)
  
-        const savedLog = await saveLog(asset,event_type, message, severity);
+        const savedLog = await saveLog(asset,Log.event_type, Log.message, Log.severity);
 
         // 4. SOC AUTOMATION (The "War Room" Logic)
         // Automatically open a ticket if the agent sends a dangerous log
