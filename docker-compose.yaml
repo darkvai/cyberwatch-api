@@ -25,6 +25,19 @@ services:
     networks:
       - soc-network
 
+    logstash:
+      image: docker.elastic.co/logstash/logstash:8.13.0
+      container_name: cyberwatch-logstash
+      environment:
+        - LS_JAVA_OPTS=-Xms512m -Xmx512m # Keep memory footprint low
+      volumes:
+        # Mount your local config file directly into the container
+        - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+      ports:
+        - "5044:5044" # Open this port if you want external Winlogbeat agents to send data here
+      depends_on:
+        - backend
+
 volumes:
   mongo_data:
 

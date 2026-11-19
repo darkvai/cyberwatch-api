@@ -24,6 +24,16 @@ const incidentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Analyst' 
     },
+    rule_id: { 
+        type: String, 
+        index: true 
+    },
+    related_logs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'LogEvent' }],
+
+    alert_count: { 
+        type: Number,
+         default: 1 
+        },
     escalation_reason: {
         type: String,
         default: null

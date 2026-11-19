@@ -20,8 +20,9 @@ exports.getAllIncidents = async (req, res) => {
 
 exports.insertIncident = async (req, res) => {
     try {
-     
-        let newIncident = addIncident(req);
+        data = req.body;
+        analyst_id = req.analyst.id;
+        let newIncident = addIncident(data,analyst_id);
 
         res.status(201).json({ 
             message: 'Ticket added successfully', 

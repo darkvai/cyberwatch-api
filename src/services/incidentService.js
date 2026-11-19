@@ -10,10 +10,10 @@ exports.allIncidents = async ()=>{
         
 }
 
-exports.addIncident = async (req) =>{
+exports.addIncident = async (data,analyst_id) =>{
     const ticketData = {
-                ...req.body,
-                analyst_id: req.analyst.id 
+                ...data,
+                analyst_id: analyst_id 
             };
     
     let newIncident = new Incident(ticketData);

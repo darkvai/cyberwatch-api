@@ -23,7 +23,7 @@ publicUsers.get('/', (req, res) => {
 publicUsers.post('/',loginLimiter ,login_post);
 
 publicUsers.get('/logout',(req,res)=>{
-    res.clearCookie('jwt'); // We changed from sessions to JWTs, so clear the cookie!
+    res.clearCookie('jwt'); 
     res.redirect('/');
 });
 

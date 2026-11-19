@@ -27,7 +27,7 @@ app.use(parser());
 
 
 app.use('/v1/cyberwatch/assets', require('./src/routes/assetRouter'));
-app.use("/v1/cyberwatch",logsRouter);
+app.use("/v1/cyberwatch/logs",logsRouter);
 app.use("/v1/cyberwatch/incidents",incidentRouter);
 app.use("/v1/cyberwatch",UsersRouter);
 app.use("v1/cyberwatch/admin",adminRouter);

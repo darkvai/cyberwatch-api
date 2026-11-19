@@ -2,17 +2,26 @@ const LogEvent = require('../models/logEvent');
 
 
 
+const WIN_EVENT_MAP = {
+    '4625': 'Auth_Failure',
+    '4688': 'Process_Creation',
+    '4104': 'Process_Creation',
+    '1102': 'Audit_Log_Cleared'
+};
+
 exports.normalizePayload = (req) => {
     const payload = req.body;
 
     // 1. Windows Event Log (via Logstash/Winlogbeat JSON)
     if (payload.winlog || payload.host) {
+        const code = String(payload.event?.code || payload.winlog?.event_id || '');
         return {
             hostname: payload.host?.hostname || payload.winlog?.computer_name || 'unknown-win-host',
             ip_address: payload.host?.ip?.[0] || '0.0.0.0',
-            event_type: payload.event?.action || payload.event?.code?.toString() || 'WinEvent',
+            event_type: WIN_EVENT_MAP[code] || payload.event?.action || code || 'WinEvent',
             message: payload.message || 'Windows Event Log Triggered',
-            severity: mapSeverity(payload.log?.level || payload.event?.severity)
+            severity: exports.mapSeverity(payload.log?.level || payload.event?.severity),
+            command_line: payload.process?.command_line || payload.winlog?.event_data?.CommandLine || null,
         };
     }
 
@@ -29,9 +38,8 @@ exports.normalizePayload = (req) => {
         return {
             hostname: extract('shost') || 'unknown-cef-host',
             ip_address: extract('src') || '0.0.0.0',
-            event_type: parts[4] || 'CEF_Event',
-            message: parts[5] || 'CEF Log Triggered',
-            severity: mapSeverity(parts[6])
+            event_type: /deny|drop|block/i.test(`${parts[4]} ${parts[5]}`) ? 'Firewall_Deny' : (parts[4] || 'CEF_Event'),            message: parts[5] || 'CEF Log Triggered',
+            severity: exports.mapSeverity(parts[6])
         };
     }
 
@@ -63,7 +71,8 @@ exports.saveLog = async (asset, event_type,message,severity)=>{
                 asset_id: asset._id, 
                 event_type: event_type,
                 message: message,
-                severity: severity
+                severity: severity,
+                ...(command_line && { command_line })
             });
     
             return await newLog.save();
