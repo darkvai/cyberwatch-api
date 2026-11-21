@@ -51,9 +51,20 @@ const incidentSchema = new mongoose.Schema({
         ref: 'LogEvent' 
     }
 }, { 
-    timestamps: true 
+    timestamps: true,
+    optimisticConcurrency: true 
 });
 
+incidentSchema.index(
+    { asset_id: 1, rule_id: 1 },
+    {
+        unique: true,
+        partialFilterExpression: {
+            rule_id: { $exists: true },
+            status: { $in: ['Open', 'In Progress', 'Escalated'] }
+        }
+    }
+);
 
 
 incidentSchema.pre('save', function(next) {
