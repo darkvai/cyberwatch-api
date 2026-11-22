@@ -1,0 +1,32 @@
+const express = require('express');
+const cors = require('cors');
+const parser = require('cookie-parser');
+const path = require('path');
+const bcrypt = require('bcrypt');
+const app = express();
+
+const incidentRouter = require("./src/routes/incidentRouter.js");
+const UsersRouter = require("./src/routes/publicUsers.js");
+const logsRouter = require("./src/routes/logsRouter.js");
+const adminRouter = require("./src/routes/admin.js");
+const assetRouter = require("./src/routes/assetRouter.js");
+
+//middleware
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+    origin: process.env.ORIGIN, // WARNING: Change this to match your frontend's actual URL!
+    credentials: true                // THIS is the magic key that allows cookies to pass
+}));
+app.use(parser());
+
+
+
+app.use('/v1/cyberwatch/assets', assetRouter);
+app.use("/v1/cyberwatch/logs",logsRouter);
+app.use("/v1/cyberwatch/incidents",incidentRouter);
+app.use("/v1/cyberwatch",UsersRouter);
+app.use("/v1/cyberwatch/admin",adminRouter);
+
+module.exports= app ;

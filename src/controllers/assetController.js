@@ -1,6 +1,7 @@
 
 const {getAllAssets} = require('../services/assetService.js')
 
+
 exports.getAllAssets = async (req, res) => {
     try {
         const assets = await getAllAssets();

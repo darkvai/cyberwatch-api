@@ -1,5 +1,5 @@
 const LogEvent = require('../models/logEvent');
-
+const {evaluate} = require('../services/ccorrelationEngine.js')
 
 
 const WIN_EVENT_MAP = {
@@ -66,7 +66,7 @@ exports.mapSeverity = (extSeverity) => {
 };
 
 
-exports.saveLog = async (asset, event_type,message,severity)=>{
+exports.saveLog = async (asset, { event_type, message, severity, command_line })=>{
     const newLog = new LogEvent({
                 asset_id: asset._id, 
                 event_type: event_type,
@@ -74,8 +74,17 @@ exports.saveLog = async (asset, event_type,message,severity)=>{
                 severity: severity,
                 ...(command_line && { command_line })
             });
+
+            
     
-            return await newLog.save();
+            const savedLog = await newLog.save();
+            try {
+                await evaluate(savedLog, asset);
+            } catch (err) {
+                console.error(`Correlation failed for log ${savedLog._id}:`, err);
+            }
+
+            return savedLog;
 
 }
 

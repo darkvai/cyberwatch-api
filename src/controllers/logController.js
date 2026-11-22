@@ -18,10 +18,8 @@ exports.receiveLog = async (req, res) => {
 
         // 3. LOG STORAGE (Save the actual event)
  
-        const savedLog = await saveLog(asset,Log.event_type, Log.message, Log.severity);
+        const savedLog = await saveLog(asset,Log);
 
-        // 4. SOC AUTOMATION (The "War Room" Logic)
-        // Automatically open a ticket if the agent sends a dangerous log
 
 
         // 5. Acknowledge Receipt back to the Python Agent

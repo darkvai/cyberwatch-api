@@ -1,6 +1,6 @@
 
 
-const {allIncidents, addInicident , updateIncidentStatus , getIncidentById,deleteIncident, escalateIncident} = require('../services/logsIngestionService.js')
+const {allIncidents, addInicident , updateIncidentStatus , getIncidentById,deleteIncident, escalateIncident} = require('../services/incidentService.js')
 
 // @desc    Get all incidents for the SOC Dashboard
 // @route   GET /api/incidents

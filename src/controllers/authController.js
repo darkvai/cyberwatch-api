@@ -9,8 +9,9 @@ module.exports.login_post = async (req, res) => {
     try {
         // 2. Actually search the database for the user first
         const {analyst,token} = await loginAnalyst(username,password);
-        
-            
+        if(!{analyst,token}){
+            return res.status(401).json({ error: 'Invalid credentials' });
+        };         
         res.cookie('jwt', token, { 
                 httpOnly: true, 
                 maxAge: 3600000 
@@ -19,7 +20,7 @@ module.exports.login_post = async (req, res) => {
         return res.status(200).json({ message: 'Authentication successful', analyst: analyst.username });
         
         
-        return res.status(401).json({ error: 'Invalid credentials' });
+        
 
     } catch(error) {
         console.error("Login Error Details:", error); // Helpful for debugging in the terminal

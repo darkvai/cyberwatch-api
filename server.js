@@ -1,36 +1,20 @@
+// server.js
 require('dotenv').config();
-const db = require('./src/config/NoSQLconnection.js')
-const express = require('express');
-const cors = require('cors');
-const parser = require('cookie-parser');
-const path = require('path');
-const bcrypt = require('bcrypt');
-const app = express();
-const PORT = 5500;
-const incidentRouter = require("./src/routes/incidentRouter.js");
-const UsersRouter = require("./src/routes/publicUsers.js");
-const logsRouter = require("./src/routes/logsRouter.js");
-const adminRouter = require("./src/routes/admin.js");
-
-const {requireAuth} = require('./src/middleware/authMiddleware.js');
-
-//middleware
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-    origin: process.env.ORIGIN, // WARNING: Change this to match your frontend's actual URL!
-    credentials: true                // THIS is the magic key that allows cookies to pass
-}));
-app.use(parser());
+const { connect } = require('mongoose');
+const connectDB = require('./src/config/NoSQLconnection.js');
+const app = require('app.js');
 
 
 
-app.use('/v1/cyberwatch/assets', require('./src/routes/assetRouter'));
-app.use("/v1/cyberwatch/logs",logsRouter);
-app.use("/v1/cyberwatch/incidents",incidentRouter);
-app.use("/v1/cyberwatch",UsersRouter);
-app.use("v1/cyberwatch/admin",adminRouter);
-app.listen(PORT, () => {
-    console.log(`[CyberWatch] Server Online at http://localhost:${PORT}`);
-});
+let server;
+
+const startServer = async () => {
+    try {
+        connectDB().then(() => {
+        server = app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+        });
+    } catch (err) {
+        console.error('Failed to start server:', err);
+        process.exit(1);
+    }
+};
