@@ -15,10 +15,7 @@ const loginLimiter = rateLimit({
 });
 
 
-// === PUBLIC ROUTES (No Cookie Required) ===
-publicUsers.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../public', 'index.html'));
-});
+
 
 publicUsers.post('/',loginLimiter ,login_post);
 
@@ -30,13 +27,6 @@ publicUsers.get('/logout',(req,res)=>{
 // === PROTECTED ROUTES (Cookie Required) ===
 publicUsers.use(requireAuth); // <-- Put the bouncer here!
 
-publicUsers.get('/dashboard',(req, res) => {
-    res.sendFile(path.join(__dirname, '../../public', 'dashboard.html'));
-});
-
-publicUsers.get('/profile',(req, res) => {
-    res.sendFile(path.join(__dirname, '../../public', 'profile.html'));
-});
 
 publicUsers.get('/me',(req,res)=>{
     // We update this to use the JWT payload attached by the middleware
