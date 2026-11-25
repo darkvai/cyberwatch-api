@@ -2,7 +2,10 @@
 require('dotenv').config();
 const { connect } = require('mongoose');
 const connectDB = require('./src/config/NoSQLconnection.js');
-const app = require('app.js');
+const app = require('./app.js');
+
+
+const PORT = process.env.PORT || 3000;
 
 
 
@@ -18,3 +21,5 @@ const startServer = async () => {
         process.exit(1);
     }
 };
+
+startServer();

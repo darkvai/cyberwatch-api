@@ -1,5 +1,5 @@
 const apiKeyService = require('../services/apiKeyService');
-const ApiKey = require('../models/apikeys');
+const ApiKey = require('../models/ApiKey');
 
 // POST /api/v1/admin/api-keys
 exports.createKey = async (req, res) => {

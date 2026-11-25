@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const ApiKey = require('../models/apikeys');
+const ApiKey = require('../models/ApiKey');
 
 exports.requireApiKey = async (req, res, next) => {
     const authHeader = req.headers.authorization;

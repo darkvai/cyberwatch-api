@@ -5,7 +5,7 @@ const {normalizePayload} = require('../services/logsIngestionService');
 const logSchema = z.object({
     hostname: z.string().min(1, "Hostname is required"),
     // Accepts standard IPs, falls back to basic string length for internal network edge cases
-    ip_address: z.string().ip("Invalid IP address format").or(z.string().min(7)), 
+    ip_address: z.string().ipv4("Invalid IP address format").or(z.string().min(7)), 
     event_type: z.string().min(1, "Event type is required"),
     message: z.string().default("No message provided"),
     // Enforce strict Enum mapping to prevent typos in the DB

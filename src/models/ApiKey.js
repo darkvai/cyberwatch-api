@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const apiKeySchema = new mongoose.Schema({
-    key_hash: { type: String, required: true, unique: true },
+    key_hash: { type: String, required: true },
     key_prefix: { type: String, required: true },
     consumer_name: { type: String, required: true }, // e.g., "Winlogbeat - Database Server"
     scopes: { type: [String], default: ['logs:write'] },
@@ -14,4 +14,4 @@ apiKeySchema.index(
     { partialFilterExpression: { revoked_at: null } }
 );
 
-module.exports = mongoose.model('apikeys', apiKeySchema);
+module.exports = mongoose.model('ApiKey', apiKeySchema);

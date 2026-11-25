@@ -15,6 +15,10 @@ pids/
 *.seed
 *.pid.lock
 
+coverage/
+bench.json
+
+
 # ========================
 # 2. Environment Variables
 # ========================
