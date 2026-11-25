@@ -289,21 +289,7 @@ headers => {
 }
 ```
 
----
 
-## Screenshots
-
-<img width="1366" height="639" alt="SOC Dashboard" src="https://github.com/user-attachments/assets/9e9cfc2a-6fe1-4c4c-bae2-dd4476c66394" />
-
-<img width="1366" height="1291" alt="Incident Detail" src="https://github.com/user-attachments/assets/160ed0e9-82db-46e9-9609-d1a945639630" />
-
-<img width="1366" height="682" alt="Live Log Terminal" src="https://github.com/user-attachments/assets/5c062b85-c478-4533-a750-78f5e7db2be2" />
-
-<img width="1352" height="638" alt="Asset View" src="https://github.com/user-attachments/assets/ef1f85f4-0278-4235-8748-9afeaa4f3a5d" />
-
-<img width="1366" height="639" alt="Login Screen" src="https://github.com/user-attachments/assets/60b88386-4193-4170-a093-a188ef053cba" />
-
----
 
 ## Contributing
 
