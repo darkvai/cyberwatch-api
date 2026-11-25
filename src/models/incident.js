@@ -49,7 +49,14 @@ const incidentSchema = new mongoose.Schema({
     log_id: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'LogEvent' 
-    }
+    },
+    tags: [{
+         type: String 
+        }],
+    last_seen: {
+         type: Date,
+          default: Date.now 
+        }
 }, { 
     timestamps: true,
     optimisticConcurrency: true 
@@ -67,24 +74,26 @@ incidentSchema.index(
 );
 
 
-incidentSchema.pre('save', function(next) {
-    // Only calculate this if it is a brand new ticket
-    if (this.isNew) {
-        const creationTime = this.createdAt || Date.now();
-        let addHours = 0;
+incidentSchema.pre('save', function () {
+    if (!this.isNew || this.due_at) return;
 
-        switch (this.severity) {
-            case 'Critical': addHours = 1; break;
-            case 'High': addHours = 4; break;
-            case 'Medium': addHours = 24; break;
-            case 'Low': addHours = 48; break; // Default SLA for Low
-            default: addHours = 24;
-        }
+    const now = Date.now();
+    const HOUR = 60 * 60 * 1000;
 
-        // Convert hours to milliseconds and set the due_at timestamp
-        this.due_at = new Date(creationTime + (addHours * 60 * 60 * 1000));
+    switch (this.severity) {
+        case 'Critical':
+            this.due_at = new Date(now + 1 * HOUR);
+            break;
+        case 'High':
+            this.due_at = new Date(now + 4 * HOUR);
+            break;
+        case 'Medium':
+            this.due_at = new Date(now + 24 * HOUR);
+            break;
+        default:
+            this.due_at = new Date(now + 48 * HOUR);
+            break;
     }
-    next();
 });
 
 module.exports = mongoose.model('incident', incidentSchema);

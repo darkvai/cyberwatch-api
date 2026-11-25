@@ -1,5 +1,5 @@
 const LogEvent = require('../models/logEvent');
-const {evaluate} = require('../services/ccorrelationEngine.js')
+const {evaluate} = require('../services/correlationEngine.js')
 
 
 const WIN_EVENT_MAP = {

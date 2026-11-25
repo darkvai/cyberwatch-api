@@ -8,7 +8,8 @@ module.exports = [
         threshold: 5,
         windowMs: 2 * 60 * 1000, // 2 minutes
         severity: 'High',
-        assignedTier: 'L1'
+        assignedTier: 'L1',
+        tags: ['T1110']
     },
     {
         id: 'RULE_T1059_001_POWERSHELL',
@@ -19,7 +20,8 @@ module.exports = [
         threshold: 1, // Single-event trigger
         windowMs: 60 * 1000,
         severity: 'High',
-        assignedTier: 'L2'
+        assignedTier: 'L2',
+        tags: ['T1059.001']
     },
     {
         id: 'RULE_T1046_PORT_SCAN',
@@ -29,7 +31,8 @@ module.exports = [
         threshold: 10,
         windowMs: 60 * 1000, // 1 minute
         severity: 'Medium',
-        assignedTier: 'L1'
+        assignedTier: 'L1',
+        tags: ['T1046']
     },
     {
         id: 'RULE_T1070_001_LOG_CLEAR',
@@ -39,7 +42,8 @@ module.exports = [
         threshold: 1, // Immediate escalation
         windowMs: 60 * 1000,
         severity: 'Critical',
-        assignedTier: 'L3'
+        assignedTier: 'L3',
+        tags: ['T1070.001']
     },
     {
         id: 'RULE_T1490_SHADOW_DELETE',
@@ -50,6 +54,7 @@ module.exports = [
         threshold: 1,
         windowMs: 60 * 1000,
         severity: 'Critical',
-        assignedTier: 'L3'
+        assignedTier: 'L3',
+        tags: ['T1490']
     }
 ];

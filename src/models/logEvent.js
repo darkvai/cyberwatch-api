@@ -18,7 +18,11 @@ const logEventSchema = new Schema({
     severity: { 
         type: String, 
         required: true 
-    }
+    },
+    command_line: { 
+        type: String,
+         default: null 
+        }
 }, { 
     timestamps: true 
 });
