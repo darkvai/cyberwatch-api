@@ -1,10 +1,12 @@
 const Analyst = require('../models/analyst'); 
 
 
-exports.addAnalyst = async (username,pass) =>{
+exports.addAnalyst = async (name,username,pass,role) =>{
      return await Analyst.create({
+                name,
                 username,
-                password: pass
+                password: pass,
+                role,                
             });
 
 }

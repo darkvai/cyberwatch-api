@@ -3,6 +3,8 @@ const path = require('path');
 const publicUsers = express.Router();
 const {requireAuth} = require('../middleware/authMiddleware.js');
 const {login_post} = require('../controllers/authController.js');
+const {createAnalyst} = require('../controllers/analystController.js');
+
 const rateLimit = require('express-rate-limit');
 
 
@@ -12,12 +14,14 @@ const loginLimiter = rateLimit({
     message: { error: 'Too many login attempts from this IP, please try again after 15 minutes' },
     standardHeaders: true, 
     legacyHeaders: false, 
+    skip: () => process.env.NODE_ENV === 'test',
 });
 
 
 
 
-publicUsers.post('/',loginLimiter ,login_post);
+publicUsers.post('/login',loginLimiter ,login_post);
+publicUsers.post('/register',createAnalyst);
 
 publicUsers.get('/logout',(req,res)=>{
     res.clearCookie('jwt'); 
@@ -25,10 +29,9 @@ publicUsers.get('/logout',(req,res)=>{
 });
 
 // === PROTECTED ROUTES (Cookie Required) ===
-publicUsers.use(requireAuth); // <-- Put the bouncer here!
 
 
-publicUsers.get('/me',(req,res)=>{
+publicUsers.get('/me',requireAuth,(req,res)=>{
     // We update this to use the JWT payload attached by the middleware
     res.json({logged_in: true, user: req.analyst });
 });

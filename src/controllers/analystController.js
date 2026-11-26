@@ -9,13 +9,13 @@ const {getAllAnalysts, addAnalyst} = require('../services/analystService.js')
 
 
 exports.createAnalyst = async (req, res) => {
-    const { username, password } = req.body;
+    const { name,username, password,role } = req.body;
 
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newAnalyst = await addAnalyst(username,hashedPassword)
+        const newAnalyst = await addAnalyst(name,username,hashedPassword,role);
         res.status(201).json({ 
             message: "Analyst provisioned successfully", 
             analyst: { id: newAnalyst._id, username: newAnalyst.username } 
