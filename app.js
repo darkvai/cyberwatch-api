@@ -12,6 +12,12 @@ const adminRouter = require("./src/routes/admin.js");
 const assetRouter = require("./src/routes/assetRouter.js");
 
 //middleware
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./src/config/swagger');
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
+app.get('/api-docs.json', (req, res) => res.json(swaggerSpec));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
