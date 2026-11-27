@@ -9,7 +9,9 @@ const logSchema = z.object({
     event_type: z.string().min(1, "Event type is required"),
     message: z.string().default("No message provided"),
     // Enforce strict Enum mapping to prevent typos in the DB
-    severity: z.enum(['Low', 'Medium', 'High', 'Critical'])
+    severity: z.enum(['Low', 'Medium', 'High', 'Critical']),
+    command_line: z.string().nullable().optional()
+
 
 
 })

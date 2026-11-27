@@ -10,10 +10,10 @@ const WIN_EVENT_MAP = {
 };
 
 exports.normalizePayload = (req) => {
-    const payload = req.body;
+    const payload = req.body|| req;
 
     // 1. Windows Event Log (via Logstash/Winlogbeat JSON)
-    if (payload.winlog || payload.host) {
+    if (payload?.winlog || payload?.host) {
         const code = String(payload.event?.code || payload.winlog?.event_id || '');
         return {
             hostname: payload.host?.hostname || payload.winlog?.computer_name || 'unknown-win-host',
@@ -79,7 +79,7 @@ exports.saveLog = async (asset, { event_type, message, severity, command_line })
     
             const savedLog = await newLog.save();
             try {
-                await evaluate(savedLog, asset);
+                await evaluate(savedLog, asset._id);
             } catch (err) {
                 console.error(`Correlation failed for log ${savedLog._id}:`, err);
             }

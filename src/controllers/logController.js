@@ -14,7 +14,7 @@ exports.receiveLog = async (req, res) => {
         const Log = req.cleanLog;
 
         // 2. ASSET DISCOVERY (Check if the machine already exists)
-        const asset = discoverAndRegisterAsset(Log.hostname,Log.ip_address);
+        const asset = await discoverAndRegisterAsset(Log.hostname,Log.ip_address);
 
         // 3. LOG STORAGE (Save the actual event)
  

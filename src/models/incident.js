@@ -51,12 +51,12 @@ const incidentSchema = new mongoose.Schema({
         ref: 'LogEvent' 
     },
     tags: [{
-         type: String 
-        }],
+        type: String
+    }],
     last_seen: {
-         type: Date,
-          default: Date.now 
-        }
+        type: Date,
+        default: Date.now
+    }
 }, { 
     timestamps: true,
     optimisticConcurrency: true 
@@ -73,26 +73,20 @@ incidentSchema.index(
     }
 );
 
-
 incidentSchema.pre('save', function () {
-    if (!this.isNew || this.due_at) return;
+    if (this.isNew) {
+        const creationTime = this.createdAt ? this.createdAt.getTime() : Date.now();
+        let addHours = 0;
 
-    const now = Date.now();
-    const HOUR = 60 * 60 * 1000;
+        switch (this.severity) {
+            case 'Critical': addHours = 1; break;
+            case 'High': addHours = 4; break;
+            case 'Medium': addHours = 24; break;
+            case 'Low': addHours = 48; break;
+            default: addHours = 24;
+        }
 
-    switch (this.severity) {
-        case 'Critical':
-            this.due_at = new Date(now + 1 * HOUR);
-            break;
-        case 'High':
-            this.due_at = new Date(now + 4 * HOUR);
-            break;
-        case 'Medium':
-            this.due_at = new Date(now + 24 * HOUR);
-            break;
-        default:
-            this.due_at = new Date(now + 48 * HOUR);
-            break;
+        this.due_at = new Date(creationTime + (addHours * 60 * 60 * 1000));
     }
 });
 

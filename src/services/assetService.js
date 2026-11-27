@@ -13,7 +13,7 @@ exports.discoverAndRegisterAsset = async (hostname, ip_address) => {
         },
         { 
             upsert: true, // Creates the document if it doesn't exist
-            new: true,    // Returns the updated document to the controller
+            returnDocument: 'after',
             setDefaultsOnInsert: true 
         }
     );
